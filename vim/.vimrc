@@ -27,10 +27,22 @@ let g:jsx_ext_required = 0
 "local working directory according to this variable
 let g:ctrlp_working_path_mode = 'ra'
 
+"""""""""""Language/Framework specific"""""""""""
+
 "For ruby on rails, syntax highlighting,  and indent
-execute pathogen#infect()
 syntax on
 filetype plugin indent on
+
+"Javascript syntax highlighting rules
+
+let g:javascript_plugin_jsdoc = 1
+let g:javascript_plugin_ngdoc = 1
+let g:javascript_plugin_flow = 1
+
+let g:jsx_ext_required = 0
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""
 
 "sets the key <leader> to ","
 let mapleader = ","
