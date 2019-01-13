@@ -3,9 +3,6 @@
 "
 "This is a comment
 
-"In order to run plugins that can be found under .vim
-execute pathogen#infect()
-
 """"""""""fzf settings""""""""""
 "Change the default mapping and the default command to invoke CtrlP
 set rtp+=/usr/local/opt/fzf
@@ -16,9 +13,8 @@ map <c-p> :FZF<cr>
 " site: https://github.com/junegunn/fzf#as-vim-plugin
 
 """""""""""""""""""""""""""""""""""
-
 "Ctags setting
-set tags=/Users/dawasherpa/projects/biggerpockets/tags
+set tags=./tags,tags;
 
 "Allow jsx syntax highlighting in .js files
 let g:jsx_ext_required = 0
@@ -41,8 +37,19 @@ let g:javascript_plugin_flow = 1
 
 let g:jsx_ext_required = 0
 
-
 """""""""""""""""""""""""""""""""""""""""""""""""
+
+" set the max number of lines (automatically line break at textwidth)
+set textwidth=120
+
+" dim console when line in areas where line is too long (121 being line to long in this case)
+let &colorcolumn=join(range(121,999),",")
+
+" color the 'line too long' boundary
+highlight ColorColumn guibg=#000000 ctermbg=7
+
+" matches vim clipboard to the default clipboard
+set clipboard=unnamed
 
 "sets the key <leader> to ","
 let mapleader = ","
@@ -163,9 +170,52 @@ iabbrev Gamma Γ
 
 
 "PERSONAL/CUSTOM
+" turn hybrid line numbers on
+:set number relativenumber
+" same as :set nu rnu
+
+" When entering insert mode, relative line numbers are turned off, leaving absolute line numbers turned on
+:augroup numbertoggle
+:  autocmd!
+:  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+:  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+:augroup END
+
+" highlight line numbers
+:hi CursorLineNr cterm=bold ctermfg=red ctermbg=white
+:hi LineNr ctermfg=blue ctermbg=white
+
+" Set sources vim looks inside to find candidates which will populate the completion menu
+set complete=.,w,b,u,t,kspell
+
+"Only search relative to the directory of the current file and in the current directory
+set path=.,,**
+
 "map ctrl + direction to change window in that direction
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-l> <c-w>l
 nnoremap <c-h> <c-w>h
 
+" The Silver Searcher
+if executable('ag')
+  " Use ag over grep
+  set grepprg=ag\ --nogroup\ --nocolor
+endif
+
+" bind \ (backward slash) to grep shortcut
+command! -nargs=+ -complete=file -bar Ag silent! grep! <args>|botright cwindow|redraw!
+nnoremap \ :Ag -s<SPACE>
+nnoremap <leader>\ :Ag -s <C-R><C-W>
+
+set switchbuf=vsplit
+
+" search for currently highlighted word
+nnoremap <leader>/ /<C-R><C-W>
+
+set wildmenu
+
+" Display extra whitespace
+set list listchars=tab:\ \ ,trail:·,nbsp:·
+:highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
