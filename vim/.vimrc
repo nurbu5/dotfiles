@@ -15,6 +15,10 @@ map <c-p> :FZF<cr>
 """""""""""""""""""""""""""""""""""
 "Ctags setting
 set tags=./tags,tags;
+" Use Ctrl-\ to jump to a definition in a new tab
+map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
+" Use Alt-] to jump to a definition in a new vertical split
+map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 
 "Allow jsx syntax highlighting in .js files
 let g:jsx_ext_required = 0
