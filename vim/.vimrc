@@ -54,8 +54,8 @@ set clipboard=unnamed
 "sets the key <leader> to ","
 let mapleader = ","
 
-"set the key <localleader> to "\", note we use \\ becuause "\" is the escape character
-let maplocalleader = "\\"
+"set the key <localleader> to "+"
+let maplocalleader = "+"
 
 "prints out a cat whenever you open vim
 echo ">^.^<"
@@ -127,6 +127,8 @@ filetype on
 augroup rccommands
 
     "autocommands for commenting using <localleader>c in some common programming languages
+    autocmd FileType ruby nnoremap <buffer> <localleader>c I#<esc>
+    autocmd FileType go nnoremap <buffer> <localleader>c I//<esc>
     autocmd FileType javascript nnoremap <buffer> <localleader>c I//<esc>
     autocmd FileType python nnoremap <buffer> <localleader>c I#<esc>
     autocmd FileType php nnoremap <buffer> <localleader>c I//<esc>
@@ -135,10 +137,10 @@ augroup rccommands
 
     "autocommands for set options in specific programming languages
     autocmd FileType javascript setlocal nu
-     
+
     "autocommand abbreviations for if statements in certain languages
-    autocmd FileType javascript iabbrev <buffer> iff if (){<cr><cr>} 
-    autocmd FileType python iabbrev <buffer> iff if:<cr> 
+    autocmd FileType javascript iabbrev <buffer> iff if (){<cr><cr>}
+    autocmd FileType python iabbrev <buffer> iff if:<cr>
 
     "autocommand abbreviations for php settings, macros, and abbreviations
     autocmd FileType php,html nnoremap <buffer> <localleader>f Vypa/<esc>
@@ -167,12 +169,15 @@ iabbrev gamma γ
 iabbrev Sigma Σ
 iabbrev Gamma Γ
 
-
-
 "PERSONAL/CUSTOM
 " turn hybrid line numbers on
 :set number relativenumber
 " same as :set nu rnu
+
+" When using j or k to jump relatively, add the jump to the 'jumps' list (can now use CTRL-o and CTRL-i)
+" this is really useful for when using relativenumber
+nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'gk'
+nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'gj'
 
 " When entering insert mode, relative line numbers are turned off, leaving absolute line numbers turned on
 :augroup numbertoggle
@@ -209,7 +214,7 @@ nnoremap \ :Ag -s<SPACE>
 nnoremap <leader>\ :Ag -s <C-R><C-W>
 
 " Create a regex that looks for definitions in ruby and golang
-nnoremap g\ :Ag -s '^(module\\|def\\|func\\class\\|type) Subscriptions'<CR>
+nnoremap g\ :Ag -s '^(module\\|def\\|func\\|class\\|type) .*<C-R><C-W>'<CR>
 
 set switchbuf=vsplit
 
