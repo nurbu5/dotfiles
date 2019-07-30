@@ -1,3 +1,4 @@
+" font: InputMono 14 pt.
 """"""""""fzf settings""""""""""
 " Don't forget to install fzf using homebrew
 
@@ -137,5 +138,7 @@ set hlsearch "highlight search
 nnoremap <CR> :nohlsearch<CR><CR>
 
 " Use the matchit plugin that vim comes with by default
-" This allows '%' to match html tags
 packadd! matchit
+
+" Have autocompletion behave more normally
+set wildmode=longest,list,full
