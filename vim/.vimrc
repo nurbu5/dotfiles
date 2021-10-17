@@ -48,7 +48,7 @@ endfunction
 "    \ coc#refresh()
 
 " Use <Tab> to confirm completion
-inoremap <silent><expr> <Tab> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
+inoremap <silent><expr> <Tab> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<Tab>"
 " Use <cr> to confirm completion
 inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>"
 
