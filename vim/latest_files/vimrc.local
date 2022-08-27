@@ -1,0 +1,134 @@
+"prints out a cat whenever you open vim
+echo ">^.^<"
+
+"remap "jk" to escape insert and visual modes
+inoremap jk <esc>
+vnoremap jk <esc>
+
+" Folding
+set foldmethod=syntax
+set foldlevelstart=1
+
+"map <leader>sv to execute the vimrc file, think of this as source vimrc (sv)
+nnoremap <leader>sv :source $MYVIMRC<cr>
+
+" When entering insert mode, relative line numbers are turned off, leaving
+" absolute line numbers turned on
+augroup numbertoggle
+  autocmd!
+  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+augroup END
+
+"Only search relative to the directory of the current file and in the current directory
+set path=.,,**
+
+"When invoked, unless a starting directory is specified, CtrlP will set its
+"local working directory according to this variable
+let g:ctrlp_working_path_mode = 'ra'
+
+""""""""""""""""""""HIGHLIGHTING""""""""""""""""""""
+" Change the color of the line that delineates max number of characters
+highlight ColorColumn ctermbg=LightCyan guibg=LightCyan
+
+" highlight whitespace at the end of a line
+hi ExtraWhitespace ctermbg=Red guibg=Red
+match ExtraWhitespace /\s\+$/
+
+" highlight search
+set hlsearch
+" Press return to temporarily disable hlsearch
+nnoremap <CR> :nohlsearch<CR><CR>
+
+" highlight line numbers
+hi LineNr ctermfg=blue ctermbg=white
+
+
+""""""""""""""""""""CLIPBOARD related""""""""""""""""""""
+" matches vim clipboard to the default clipboard
+set clipboard=unnamed
+
+" WSL yank support
+let s:clip = '/mnt/c/Windows/System32/clip.exe'  " change this path according to your mount point
+if executable(s:clip)
+  augroup WSLYank
+    autocmd!
+    autocmd TextYankPost * if v:event.operator ==# 'y' | call system(s:clip, @0) | endif
+  augroup END
+endif
+
+""""""""""""""""""""PLUGIN: vim-test settings""""""""""""""""""""
+let test#python#runner = 'pyunit'
+let test#python#pyunit#executable = 'poetry run python manage.py test'
+let test#strategy = 'vimterminal'
+
+autocmd FileType python call SetPythonMappings()
+function SetPythonMappings()
+  nmap <silent> <leader>tn :TestNearest --keepdb<CR>
+  nmap <silent> <leader>tw :TestNearest<CR>
+  nmap <silent> <leader>tf :TestFile --keepdb<CR>
+  nmap <silent> <leader>ts :TestSuite<CR>
+  nmap <silent> <leader>tl :TestLast<CR>
+  nmap <silent> <leader>tg :TestVisit<CR>
+endfunction
+
+autocmd FileType ruby,go call SetDefaultTestMappings()
+function SetDefaultTestMappings()
+  nmap <silent> <leader>tn :TestNearest<CR>
+  nmap <silent> <leader>tf :TestFile<CR>
+  nmap <silent> <leader>ts :TestSuite<CR>
+  nmap <silent> <leader>tl :TestLast<CR>
+  nmap <silent> <leader>tg :TestVisit<CR>
+endfunction
+
+""""""""""""""""""""PLUGIN: coc-vim settings""""""""""""""""""""
+" Tab completion https://github.com/neoclide/coc.nvim/wiki/Completion-with-sources
+" Use <tab> for trigger completion and navigate to the next complete item
+" function! s:check_back_space() abort
+"     let col = col('.') - 1
+"     return !col || getline('.')[col - 1]  =~ '\s'
+" endfunction
+
+" Use "gd" to goto definition
+nmap <silent> gd <Plug>(coc-definition)
+" Use gy to view type definitons
+nmap <silent> gy <Plug>(coc-type-definition)
+" Use gi to go to implementation
+nmap <silent> gi <Plug>(coc-implementation)
+" Use gr to view references to a variable or class
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call ShowDocumentation()<CR>
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+
+" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
+
+"""""""""""""""""""Markdown, Text, Vimrc, or no filetype
+" Turn off autocomplete for markdown and text files
+autocmd FileType markdown,text,vim let b:coc_suggest_disable = 1
+" Turn off autocomplete for files without a filetype
+autocmd BufNewFile,BufRead,BufWrite * if empty(&filetype) | execute 'let b:coc_suggest_disable = 1' | endif
+
+""""""""""""""""""""STUFF I MIGHT NEED""""""""""""""""""""
+" turn off line numbers for markdown and text files
+"autocmd FileType markdown,text,vim set nonumber norelativenumber
+
+"vim tab settings
+"set smartindent
+"set softtabstop=2
+
+"set switchbuf=vsplit
+
+" Show menu of wildcard options when tab completing
+"set wildmenu
+
+" Go to defintion using ALE
+"nmap <silent> gd :ALEGoToDefinition<cr>

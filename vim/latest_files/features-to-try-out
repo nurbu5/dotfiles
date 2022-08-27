@@ -1,0 +1,44 @@
+- Symbol renaming.
+<leader>rn
+  - Be careful with this, try to open a new vim session before running it or else you might miss some names
+
+- Use 'gcc' to comment out a line
+  - Highlight a set of lines and use 'gc' to comment them all out
+  - See: vim-scripts/tComment for more info
+
+- Create files in new directories with :saveas, the directories will automatically be created
+
+- Use 'tabm' to move a tab (index 0)
+
+- Use '%' to jump between `do`/`end` and other sets of braces
+
+GET MORE INFO:
+
+- Use 'K' to show documentation in preview window.
+  - Use 'K' to show vim help as well
+
+- Use '<c-]>' to jump to a tags definition
+  - Use it if gd doesn't work
+  - Alternatively you can use 'tag {keyword}'
+    - This can be useful because it supports tab completion
+    - Type in part of a word and then press <c-d> to see all tags that start
+      with that partial word
+- Use ':tags' to see a list of the tags you've recently jumped to
+  - This is a history of which tags you've followed using <c-]>
+- Use '<c-t>' to go back in the tag stack
+- Use 'g<c-]>' when there are multiple matches for a tag
+  - This will give you all tags that match that tag
+  - If there's only one tag matching it'll jump directly to that tag
+  - Alternatively you can use 'tjump {keyword}'
+    - This can be useful because it supports tab completion
+    - Type in part of a word and then press <c-d> to see all tags that start
+      with that partial word
+- Use ':tselect' after following a tag with multiple matches
+  - This will give you all tags that match that tag
+  - ':tnext', ':tprev', ':tfirst', ':tlast' will let you get the other matches from the list
+
+
+Hit or miss:
+- Use gr to view references to a variable or class
+- Use gy to view type definitons
+- Use gi to go to implementation

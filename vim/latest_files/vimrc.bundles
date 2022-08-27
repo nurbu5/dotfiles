@@ -1,0 +1,106 @@
+" Source: https://github.com/thoughtbot/dotfiles/blob/main/vimrc
+
+if &compatible
+  set nocompatible
+end
+
+" vim-plug: https://github.com/junegunn/vim-plug
+" This code downloads vimplug if you don't already have it
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+" Remove declared plugins
+function! s:UnPlug(plug_name)
+  if has_key(g:plugs, a:plug_name)
+    call remove(g:plugs, a:plug_name)
+  endif
+endfunction
+command!  -nargs=1 UnPlug call s:UnPlug(<args>)
+
+let g:has_async = v:version >= 800 || has('nvim')
+
+" [SETUP] If you already have vimplug installed, make sure to remove your
+" existing plugins
+call plug#begin('~/.vim/bundle')
+
+" Define bundles via Github repos
+
+" If fzf has already been installed via Homebrew, use the existing fzf
+" Otherwise, install fzf. The `--all` flag makes fzf accessible outside of vim
+if isdirectory("/usr/local/opt/fzf")
+  Plug '/usr/local/opt/fzf'
+else
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+endif
+
+Plug 'junegunn/fzf.vim'
+Plug 'janko-m/vim-test'
+Plug 'pbrisbin/vim-mkdir'
+Plug 'vim-scripts/tComment' " toggle commenting out one or more lines with `gc`
+Plug 'neoclide/coc.nvim', {'branch': 'release'} " coc-vim
+
+" Might be useful in the future
+" Plug 'tpope/vim-surround' " find and edit surrounding parens, quotes, html tags, etc.
+" Plug 'tpope/vim-repeat' " Repeat the last action from a plugin
+" Plug 'tpope/vim-rhubarb'
+" Plug 'tpope/vim-projectionist'
+" Plug 'tpope/vim-fugitive' " Do git stuff in vim
+" Plug 'christoomey/vim-run-interactive' " Run any command in your terminal in vim
+" Plug 'tpope/vim-eunuch' " Run tweaked shell commands in vim
+" Plug 'slim-template/vim-slim' " 'slim' Sytax highlighting
+
+" Markdown visual maps
+" Run :CocInstall coc-markmap
+" To view a markdown file run :CocCommand markmap.create
+
+" Language specific plugins
+
+" Javascript
+"Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
+"Plug 'pangloss/vim-javascript'
+
+"Plug 'elixir-lang/vim-elixir'
+
+" Golang
+Plug 'josa42/coc-go', {'do': 'yarn install --frozen-lockfile'}
+Plug 'fatih/vim-go'
+
+" Dockerfile
+"Plug 'josa42/coc-docker', {'do': 'yarn install --frozen-lockfile'}
+
+" Ruby
+"Plug 'tpope/vim-endwise' " Add 'end' to the when writing a function or 'if'
+"Plug 'tpope/vim-rake'
+Plug 'tpope/vim-rails'
+Plug 'neoclide/coc-solargraph'
+" [SETUP] You'll need exuberant ctags for these ones:
+" [SETUP] ctags on bundled gems (requires running `gem install gem-ctags` then `gem ctags`)
+Plug 'tpope/vim-bundler'
+" [SETUP] ctags on ruby versions installed with rbenv (run after install: `rbenv ctags`)
+" [SETUP] follow instructions here: https://github.com/tpope/rbenv-ctags
+Plug 'vim-ruby/vim-ruby'
+
+" Python
+Plug 'fannheyward/coc-pyright'
+
+" Frontend
+" Plug 'neoclide/coc-html', {'do': 'yarn install --frozen-lockfile'}
+" Plug 'neoclide/coc-css', {'do': 'yarn install --frozen-lockfile'}
+" Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
+
+" C#
+" Plug 'OmniSharp/omnisharp-vim'
+
+" ALE language server for linting while working
+" if g:has_async
+"   Plug 'dense-analysis/ale'
+" endif
+
+if filereadable(expand("~/.vimrc.bundles.local"))
+  source ~/.vimrc.bundles.local
+endif
+
+call plug#end()
